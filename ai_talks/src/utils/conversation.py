@@ -1,12 +1,12 @@
+from random import randrange
+
 import streamlit as st
 from openai.error import InvalidRequestError, OpenAIError
-from requests.exceptions import TooManyRedirects
 from streamlit_chat import message
 
-from src.utils.agi.bard import BardChat
-from src.utils.agi.chat_gpt import create_gpt_completion
-from src.utils.stt import show_voice_input
-from src.utils.tts import show_audio_player
+from .agi.chat_gpt import create_gpt_completion
+from .stt import show_voice_input
+from .tts import show_audio_player
 
 
 def clear_chat() -> None:
@@ -14,6 +14,9 @@ def clear_chat() -> None:
     st.session_state.past = []
     st.session_state.messages = []
     st.session_state.user_text = ""
+    st.session_state.seed = randrange(10**8)  # noqa: S311
+    st.session_state.costs = []
+    st.session_state.total_tokens = []
 
 
 def show_text_input() -> None:
@@ -50,15 +53,33 @@ def show_chat(ai_content: str, user_text: str) -> None:
         st.session_state.generated.append(ai_content)
     if st.session_state.generated:
         for i in range(len(st.session_state.generated)):
-            message(st.session_state.past[i], is_user=True, key=str(i) + "_user", avatar_style="micah")
-            message("", key=str(i))
+            message(st.session_state.past[i], is_user=True, key=str(i) + "_user", seed=st.session_state.seed)
+            message("", key=str(i), seed=st.session_state.seed)
             st.markdown(st.session_state.generated[i])
+            st.caption(f"""
+                {st.session_state.locale.tokens_count}{st.session_state.total_tokens[i]} |
+                {st.session_state.locale.message_cost}{st.session_state.costs[i]:.5f}$
+            """, help=f"{st.session_state.locale.total_cost}{sum(st.session_state.costs):.5f}$")
+
+
+def calc_cost(usage: dict) -> None:
+    total_tokens = usage.get("total_tokens")
+    prompt_tokens = usage.get("prompt_tokens")
+    completion_tokens = usage.get("completion_tokens")
+    st.session_state.total_tokens.append(total_tokens)
+    # pricing logic: https://openai.com/pricing#language-models
+    if st.session_state.model == "gpt-3.5-turbo":
+        cost = total_tokens * 0.002 / 1000
+    else:
+        cost = (prompt_tokens * 0.03 + completion_tokens * 0.06) / 1000
+    st.session_state.costs.append(cost)
 
 
 def show_gpt_conversation() -> None:
     try:
         completion = create_gpt_completion(st.session_state.model, st.session_state.messages)
         ai_content = completion.get("choices")[0].get("message").get("content")
+        calc_cost(completion.get("usage"))
         st.session_state.messages.append({"role": "assistant", "content": ai_content})
         if ai_content:
             show_chat(ai_content, st.session_state.user_text)
@@ -76,15 +97,6 @@ def show_gpt_conversation() -> None:
         st.error(err)
 
 
-def show_bard_conversation() -> None:
-    try:
-        bard = BardChat(st.secrets.api_credentials.bard_session)
-        ai_content = bard.ask(st.session_state.user_text)
-        st.warning(ai_content.get("content"))
-    except (TooManyRedirects, AttributeError) as err:
-        st.error(err)
-
-
 def show_conversation() -> None:
     if st.session_state.messages:
         st.session_state.messages.append({"role": "user", "content": st.session_state.user_text})
@@ -94,7 +106,4 @@ def show_conversation() -> None:
             {"role": "system", "content": ai_role},
             {"role": "user", "content": st.session_state.user_text},
         ]
-    if st.session_state.model == "bard":
-        show_bard_conversation()
-    else:
-        show_gpt_conversation()
+    show_gpt_conversation()

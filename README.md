@@ -1,12 +1,26 @@
 # AI Talks
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ai-talks.streamlit.app)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://agi-talks.streamlit.app)
+
+![](ai_talks/assets/img/ai_face.png)
 
 A ChatGPT API wrapper, providing a user-friendly Streamlit web interface.
 
 Enhance your ChatGPT experience with our user-friendly API wrapper, featuring a seamless Streamlit web interface. Effortlessly interact with ChatGPT, while enjoying an intuitive and responsive design. Discover simplified access to advanced AI technology in just a few clicks.
 
+<details>
+   <summary>Demo</summary>
+
 ![](ai_talks/assets/demo/ai-talks.gif)
+
+<details>
+   <summary>Tokens counting</summary>
+
+![](ai_talks/assets/demo/ai-talks-tokens.gif)
+
+</details>
+
+</details>
 
 ## Setup
 
@@ -22,7 +36,7 @@ git clone https://github.com/dKosarevsky/AI-Talks.git
 pip install -r requirements.txt
 ```
 
-3. Add API key to `.streamlit/secrets.toml`:
+3. Add API key to `.streamlit/secrets.toml`
 
 ```toml
 [api_credentials]
@@ -47,7 +61,7 @@ Once the script is started, you can go to the URL [http://localhost:8501](http:/
 
 ## License
 
-This project is released under the MIT License.
+This project is released under the [MIT License](LICENSE).
 
 ## Donation
 <details>
@@ -58,6 +72,12 @@ This allows you to provide access to communication with AI for all users.
 Support us for joint development and interaction with the intelligence of the future!
 
 **Crypto:**
+
+- Bitcoin (BTC)
+
+```
+1HRDUif7oKDw9XJFXZ14TZZazokf4QH9fb
+```
 
 - USD Tether (USDT TRC20):
 
@@ -78,9 +98,21 @@ UQDbnx17N2iOmxfQF0k55QScDMB0MHL9rsq-iGB93RMqDhIH
 
 **Russia:**
 - [Tinkoff](https://www.tinkoff.ru/cf/4Ugsr5kQ1sR)
+- [donationalerts](https://www.donationalerts.com/r/if_ai)
 - [boosty](https://boosty.to/ai-talks/donate)
-- [CloudTips (Tinkoff)](https://pay.cloudtips.ru/p/eafa15b2)
+- [CloudTips](https://pay.cloudtips.ru/p/eafa15b2)
 
 ![](ai_talks/assets/qr/tink.png)
 
 </details>
+
+## Project Stats
+
+<p align="center">
+  <a href="https://star-history.com/#dKosarevsky/AI-Talks&Date">
+    <img src="https://api.star-history.com/svg?repos=dKosarevsky/AI-Talks&type=Date" alt="All Stars History Chart">
+  </a>
+</p>
+  
+
+  

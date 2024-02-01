@@ -2,7 +2,8 @@ from pathlib import Path
 
 import streamlit as st
 
-from src.utils.helpers import render_svg
+from .constants import BUG_REPORT_URL, REPO_URL
+from .helpers import render_svg
 
 
 def show_info(icon: Path) -> None:
@@ -16,7 +17,7 @@ def show_info(icon: Path) -> None:
         - {render_svg(icon)} [{st.session_state.locale.footer_channel}](https://t.me/talks_aii)
     """, unsafe_allow_html=True)
     st.divider()
-    st.markdown("[project repo](https://github.com/dKosarevsky/AI-Talks)")
+    st.markdown(f"project [repo on github]({REPO_URL}) waiting for your :star: | [report]({BUG_REPORT_URL}) a bug")
 
 
 def show_donates() -> None:
@@ -24,6 +25,10 @@ def show_donates() -> None:
         ### :moneybag: {st.session_state.locale.donates}
 
         **Crypto:**
+        - Bitcoin (BTC)
+        ```
+        1HRDUif7oKDw9XJFXZ14TZZazokf4QH9fb
+        ```
         - USD Tether (USDT TRC20):
         ```
         TMQ5RiyQ7bv3XjB6Wf6JbPHVrGkhBKtmfA
@@ -41,8 +46,9 @@ def show_donates() -> None:
     st.markdown(f"""
         **{st.session_state.locale.donates1}:**
         - [Tinkoff](https://www.tinkoff.ru/cf/4Ugsr5kQ1sR)
+        - [donationalerts](https://www.donationalerts.com/r/if_ai)
         - [boosty](https://boosty.to/ai-talks/donate)
-        - [CloudTips (Tinkoff)](https://pay.cloudtips.ru/p/eafa15b2)
+        - [CloudTips](https://pay.cloudtips.ru/p/eafa15b2)
     """)
     _, img_col, _ = st.columns(3)
     with img_col:
